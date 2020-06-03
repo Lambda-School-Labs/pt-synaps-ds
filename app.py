@@ -1,3 +1,4 @@
+import calendar_heatmap
 from flask import Flask, render_template, jsonify, request, url_for
 import json
 import os
@@ -30,35 +31,14 @@ def wiki_search():
 @app.route('/heatmap', methods=['GET', 'POST'])
 def calender_heatmap():
     """Returning the plotly visual in html form"""
-     data = request.get_json()
-
-    """ Input from user. Each field is required for the DataFrame"""
-    host_is_superhost = data['host_is_superhost']
-    latitude = data['latitude']
-    longitude = data['longitude']
-    property_type = data['property_type']
-    accommodates = data['accommodates']
-    bathrooms = data['bathrooms']
-
-     """ Place for default values if any are used. """
-
-    """ Features dictionary for model """
-    features = {'host_is_superhost': host_is_superhost,
-                'latitude': latitude,
-                'longitude': longitude,
-                'property_type': property_type,
-                'accommodates': accommodates,
-                'bathrooms': bathrooms}
-
-    predict_data = pd.DataFrame(features, index=[1])
-
-    fig.write_html("templates/heatmap.html")
+    calendar_heatmap.get_viz()
     return render_template('heatmap.html')
 
 
 @app.route('/delete_map')
 def delete():
     os.remove('templates/heatmap.html')
+    return 'File deleted'
 
 
 if __name__ == '__main__':
