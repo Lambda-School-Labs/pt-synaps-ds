@@ -40,6 +40,26 @@ def get_viz_user_info(user_id):
   #adds each of these dates to a list
   return dates_created_deck, dates_viewed_cards
 
+def week_of_month(row):
+  """Function to convert day of month to week of month"""
+  day = (row['From_1st_Monday']) + 1
+  #based on index of dataframe, which counts from zero
+  if day <=7:
+    return '1st Week'
+  elif 7 < day <= 14:
+    return '2nd Week'
+  elif 14 < day <=21:
+    return '3rd Week'
+  elif 21 < day <= 28:
+    return '4th Week'
+  elif 28 < day <= 35:
+    return '5th Week'
+  #this is greater than 31 to account for padded data added at top of dataframe
+  else:
+    return ''
+  #this prevents a month from having six weeks if the 1st of the month is late
+  #in the week, instead the graph displays those days but doesn't label them
+
 def get_viz(month_to_show=datetime.now().month, year_to_show=datetime.now().year):
   """Function to show calendar heatmap for user interaction with the app. Takes in
   a month to show as an integer between 1 and 12, and a year as a four-digit 
@@ -176,6 +196,6 @@ def get_viz(month_to_show=datetime.now().month, year_to_show=datetime.now().year
           xaxis_type='category', 
           yaxis_type='category',
           plot_bgcolor='rgb(225,255,225)')
-  return figure
+  return figure.write_html('templates/heatmap.html')
 
 get_viz()
