@@ -1,4 +1,4 @@
-🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.
+
 
 🚫 The numbers 1️⃣ through 5️⃣ next to each item represent the week that part of the docs needs to be comepleted by.  Make sure to delete the numbers by the end of Labs.
 
@@ -24,6 +24,8 @@ You can find the project at [http://www.synapsapp.com/](http://www.synapsapp.com
 ![Typescript](https://img.shields.io/npm/types/typescript.svg?style=flat)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/b5c4db1c-b10d-42c3-b157-3746edd9e81d/deploy-status)](netlify link goes in these parenthesis)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![Maintainability](https://api.codeclimate.com/v1/badges/ec33ec3ad4fd03a44fb0/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/pt-synaps-ds/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/ec33ec3ad4fd03a44fb0/test_coverage)](https://codeclimate.com/github/Lambda-School-Labs/pt-synaps-ds/test_coverage)
 
 🚫 more info on using badges [here](https://github.com/badges/shields)
 
