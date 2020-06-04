@@ -31,9 +31,17 @@ def wiki_search():
 @app.route('/heatmap', methods=['GET', 'POST'])
 def calender_heatmap():
     """Returning the plotly visual in html form"""
-    calendar_heatmap.get_viz()
-    return render_template('heatmap.html')
+    month = request.args.get('month')
+    year = request.args.get('year')
 
+    # Uses the default values in function if no value is inputted
+    if month:
+        calendar_heatmap.get_viz(month, year)
+    else:
+        calendar_heatmap.get_viz()
+    
+    return render_template('heatmap.html')
+    
 
 @app.route('/delete_map')
 def delete():
