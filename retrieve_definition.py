@@ -8,6 +8,8 @@ import requests
 
 def retrieve_definition(term):
 
+    print("Searching API for: ", term)
+
     S = requests.Session()
 
     URL = "https://en.wikipedia.org/w/api.php"  # this is the base API URL for Wikipedia
@@ -75,22 +77,22 @@ def text_wrangle(term):
     """
     Check text for various edge cases and re-run
     """
-    wrangled_search = "..."
     if term.isupper():
-        wrangled_search = retrieve_definition(term.lower())
-    elif (term[0:4] == 'the ') | (term[0:4] == 'The '):
-
-        wrangled_search = retrieve_definition(term[4:])
-        #sends term back through function minus 'the'
-    elif term[-1:] == 's':
-        wrangled_search = retrieve_definition(term[:-1])
-        #sends terms back through function without final 's'
-    elif term[-1:] == 'e':
-        #this accounts for cases of "es" plural, the previous cycle would have removed the 's'
-        wrangled_search = retrieve_definition(term[:-1])
-    if len(wrangled_search) > 3:
-        return wrangled_search
-
-    else:
-        return open_search(term)
-        # all of the test cases have failed, function will return suggestions instead
+        # Makes term lowercase
+        term = term.lower()
+        print("Lowercase search: ", term)
+    if term[0:4] == 'the ':
+        # Strips 'the' and 'The' from term
+        term = term[4:]
+        print("Search without 'the: '", term)
+    if term[0:2] == 'a ':
+        term = term[2:]
+    if (term[-1:] == 's') | (term[-2:] == 'es'):
+        # Makes term singular
+        if term[-1:] == 's':
+            term = term[:-1]
+        if term[-2:] == 'es':
+            text = text[:-2]
+        print("Singular search: ", term)
+    
+    return term
