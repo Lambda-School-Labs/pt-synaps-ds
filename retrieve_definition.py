@@ -45,6 +45,7 @@ def retrieve_definition(term):
         return open_search(term)
 
 
+
 def open_search(term):
     """
     function to use opensearch on Wikipedia API and return most likely related articles for a given term. opensearch
@@ -69,7 +70,12 @@ def open_search(term):
     R = S.get(url=URL, params=params)
     DATA = R.json()
     suggests = DATA[1]
-    return f"Did you mean {suggests[0]}, {suggests[1]}, {suggests[2]}?"
+    try:
+        return f"Did you mean {suggests[0]}, {suggests[1]}, {suggests[2]}?"
+    
+    except IndexError:
+        # This covers cases where input doesn't have a close Wiki entry
+        return "We can't find anything close to that :("
 
 
 def text_wrangle(term):
