@@ -8,12 +8,10 @@ import requests
 
 def retrieve_definition(term):
 
-    print("Searching API for: ", term)
-
     S = requests.Session()
 
-    URL = "https://en.wikipedia.org/w/api.php"  # this is the base API URL for Wikipedia
-
+    URL = "https://en.wikipedia.org/w/api.php"
+    term = text_wrangle(term)
     params = {
         "action": "query",
         "prop": "extracts",
@@ -27,6 +25,7 @@ def retrieve_definition(term):
     # parameters set to query for an extract of 300 characters for the given term, in JSON format. Explaintext strips
     # out Wikipedia's special formatting. Exlimit says to only return 1 extract.
 
+    print("Searching API for: ", term)
     response = S.get(url=URL, params=params)
     data = response.json()
     pageid = list(data['query']['pages'].keys())[0]
@@ -75,7 +74,7 @@ def open_search(term):
 
 def text_wrangle(term):
     """
-    Check text for various edge cases and re-run
+    Check text for various edge cases and remove
     """
     if term.isupper():
         # Makes term lowercase
@@ -84,9 +83,10 @@ def text_wrangle(term):
     if term[0:4] == 'the ':
         # Strips 'the' and 'The' from term
         term = term[4:]
-        print("Search without 'the: '", term)
+        print("Search without 'the': ", term)
     if term[0:2] == 'a ':
         term = term[2:]
+        print("Search without 'a': ", term)
     if (term[-1:] == 's') | (term[-2:] == 'es'):
         # Makes term singular
         if term[-1:] == 's':
