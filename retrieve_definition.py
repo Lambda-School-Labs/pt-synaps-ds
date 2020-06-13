@@ -35,14 +35,14 @@ def retrieve_definition(term):
         # because one of the dictionary keys is the page ID for that term.
 
         if len(extract) == 3:
-            return text_wrangle(term)
+            return open_search(term)
 
         else:
             return extract
     except KeyError:
         # sometimes instead of an empty string as an extract the API call returns a "missing" key in JSON, this accounts
         # for that
-        return text_wrangle(term)
+        return open_search(term)
 
 
 def open_search(term):
@@ -66,7 +66,7 @@ def open_search(term):
     # Resolve means to return redirects as the page they point to.
 
 
-    R = S.get(url=URL, params=PARAMS)
+    R = S.get(url=URL, params=params)
     DATA = R.json()
     suggests = DATA[1]
     return f"Did you mean {suggests[0]}, {suggests[1]}, {suggests[2]}?"
@@ -87,12 +87,5 @@ def text_wrangle(term):
     if term[0:2] == 'a ':
         term = term[2:]
         print("Search without 'a': ", term)
-    if (term[-1:] == 's') | (term[-2:] == 'es'):
-        # Makes term singular
-        if term[-1:] == 's':
-            term = term[:-1]
-        if term[-2:] == 'es':
-            text = text[:-2]
-        print("Singular search: ", term)
     
     return term
