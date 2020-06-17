@@ -15,6 +15,7 @@ numpy = "*"
 cufflinks = "*"
 plotly = "*"
 <<<<<<< HEAD
+<<<<<<< HEAD
 fastapi = "*"
 gunicorn = "==19.9.0"
 h11 = "==0.8.1"
@@ -27,6 +28,9 @@ jinja2 = "*"
 inflect = "*"
 =======
 >>>>>>> actually merged changes
+=======
+inflect = "*"
+>>>>>>> fixed broken Pipfile.lock
 
 [requires]
 python_version = "3.7"
