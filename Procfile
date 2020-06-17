@@ -1,1 +1,2 @@
-web: gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker
+web: gunicorn main:app -t 150
+heroku ps:scale web=1
