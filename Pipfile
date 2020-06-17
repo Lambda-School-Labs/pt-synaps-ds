@@ -15,11 +15,7 @@ python-dotenv = "*"
 requests = "*"
 numpy = "*"
 cufflinks = "*"
-<<<<<<< HEAD
-inflect = "*"
-=======
 plotly = "*"
->>>>>>> origin/master
 
 [requires]
 python_version = "3.7"
