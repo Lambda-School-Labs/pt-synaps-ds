@@ -131,6 +131,7 @@
             ],
             "markers": "python_version < '3.8'",
             "version": "==1.6.1"
+<<<<<<< HEAD
         },
         "inflect": {
             "hashes": [
@@ -139,6 +140,8 @@
             ],
             "index": "pypi",
             "version": "==4.1.0"
+=======
+>>>>>>> origin/master
         },
         "ipykernel": {
             "hashes": [

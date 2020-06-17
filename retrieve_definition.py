@@ -10,12 +10,19 @@ import inflect
 # Start engine for text_wrangle() singularization
 p = inflect.engine()
 
+
 def retrieve_definition(term):
 
     S = requests.Session()
 
+<<<<<<< HEAD
     URL = "https://en.wikipedia.org/w/api.php"
     term = text_wrangle(term)
+=======
+    # this is the base API URL for Wikipedia
+    URL = "https://en.wikipedia.org/w/api.php"
+
+>>>>>>> origin/master
     params = {
         "action": "query",
         "prop": "extracts",
@@ -27,7 +34,8 @@ def retrieve_definition(term):
     }
 
     # parameters set to query for an extract of 300 characters for the given term, in JSON format. Explaintext strips
-    # out Wikipedia's special formatting. Exlimit says to only return 1 extract.
+    # out Wikipedia's special formatting. Exlimit says to only return 1
+    # extract.
 
     print("Searching API for: ", term)
     response = S.get(url=URL, params=params)
@@ -55,7 +63,7 @@ def open_search(term):
     function to use opensearch on Wikipedia API and return most likely related articles for a given term. opensearch
     is a Wikimedia API feature which returns similarly-titled articles within the wiki.
     """
-    
+
     S = requests.Session()
 
     URL = "https://en.wikipedia.org/w/api.php"
@@ -70,8 +78,12 @@ def open_search(term):
     # Parameters set tells API to use opensearch on the given term and return the results as a JSON object.
     # Resolve means to return redirects as the page they point to.
 
+<<<<<<< HEAD
 
     R = S.get(url=URL, params=params)
+=======
+    R = S.get(url=URL, params=PARAMS)
+>>>>>>> origin/master
     DATA = R.json()
     suggests = DATA[1]
     try:
@@ -87,6 +99,7 @@ def text_wrangle(term):
     Check text for various edge cases and remove
     """
     if term.isupper():
+<<<<<<< HEAD
         # Makes term lowercase
         term = term.lower()
         print("Lowercase search: ", term)
@@ -105,3 +118,24 @@ def text_wrangle(term):
         print("Search as singular: ", term)
 
     return term
+=======
+        wrangled_search = retrieve_definition(term.lower())
+    elif (term[0:4] == 'the ') | (term[0:4] == 'The '):
+
+        wrangled_search = retrieve_definition(term[4:])
+        # sends term back through function minus 'the'
+    elif term[-1:] == 's':
+        wrangled_search = retrieve_definition(term[:-1])
+        # sends terms back through function without final 's'
+    elif term[-1:] == 'e':
+        # this accounts for cases of "es" plural, the previous cycle would have
+        # removed the 's'
+        wrangled_search = retrieve_definition(term[:-1])
+    if len(wrangled_search) > 3:
+        return wrangled_search
+
+    else:
+        return open_search(term)
+        # all of the test cases have failed, function will return suggestions
+        # instead
+>>>>>>> origin/master

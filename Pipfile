@@ -14,9 +14,12 @@ gunicorn = "*"
 python-dotenv = "*"
 requests = "*"
 numpy = "*"
-plotly = "*"
 cufflinks = "*"
+<<<<<<< HEAD
 inflect = "*"
+=======
+plotly = "*"
+>>>>>>> origin/master
 
 [requires]
 python_version = "3.7"
