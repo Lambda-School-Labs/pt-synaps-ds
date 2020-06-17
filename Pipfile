@@ -15,6 +15,7 @@ cufflinks = "*"
 plotly = "*"
 fastapi = {extras = ["all"],version = "*"}
 hypercorn = "*"
+uvloop = "*"
 
 [requires]
 python_version = "3.7"
