@@ -16,6 +16,7 @@ requests = "*"
 numpy = "*"
 plotly = "*"
 cufflinks = "*"
+inflect = "*"
 
 [requires]
 python_version = "3.7"
