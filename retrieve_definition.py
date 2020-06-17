@@ -5,6 +5,10 @@
 """
 
 import requests
+import inflect
+
+# Start engine for text_wrangle() singularization
+p = inflect.engine()
 
 def retrieve_definition(term):
 
@@ -86,12 +90,18 @@ def text_wrangle(term):
         # Makes term lowercase
         term = term.lower()
         print("Lowercase search: ", term)
+
     if term[0:4] == 'the ':
         # Strips 'the' and 'The' from term
         term = term[4:]
         print("Search without 'the': ", term)
+
     if term[0:2] == 'a ':
         term = term[2:]
         print("Search without 'a': ", term)
     
+    if p.singular_noun(term):
+        term = p.singular_noun(term)
+        print("Search as singular: ", term)
+
     return term
