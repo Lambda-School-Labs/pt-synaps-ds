@@ -9,8 +9,6 @@ class TestWikiAPI(unittest.TestCase):
         self.extract = retrieve_definition("cat")
         self.maxDiff = None
         self.assertEqual(len(self.extract), 300)
-
-    def test_text_wrangle(self):
         
 
 
