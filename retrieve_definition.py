@@ -41,6 +41,7 @@ def retrieve_definition(term):
         # this selects the extract from within the JSON object returned by the API call. Two steps are necessary
         # because one of the dictionary keys is the page ID for that term.
 
+        # A non-existing extract contains a string with a length of 3
         if len(extract) == 3:
             return open_search(term)
 

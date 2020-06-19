@@ -14,5 +14,14 @@ class TestWikiAPI(unittest.TestCase):
         self.term = text_wrangle("DOG")
         self.assertEqual(self.term, "dog")
 
+        self.term = text_wrangle("the Dog")
+        self.assertEqual(self.term, "dog")
+
+        self.term = text_wrangle("a dog")
+        self.assertEqual(self.term, "dog")
+
+        self.term = text_wrangle("Dogs")
+        self.assertEqual(self.term, "dog")
+
 if __name__ == '__main__':
     unittest.main()
