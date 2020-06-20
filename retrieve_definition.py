@@ -16,7 +16,6 @@ def retrieve_definition(term):
     S = requests.Session()
 
     URL = "https://en.wikipedia.org/w/api.php"
-    term = text_wrangle(term)
     params = {
         "action": "query",
         "prop": "extracts",
@@ -36,12 +35,20 @@ def retrieve_definition(term):
     data = response.json()
     pageid = list(data['query']['pages'].keys())[0]
     try:
+        print("Pulling extract")
         extract = data['query']['pages'][pageid]['extract']
+        print(extract)
         # this selects the extract from within the JSON object returned by the API call. Two steps are necessary
         # because one of the dictionary keys is the page ID for that term.
 
         if len(extract) == 3:
-            return open_search(term)
+            wrangled_term = text_wrangle(term)
+            wrangled_extract = retrieve_definition(wrangled_term)
+            if len(wrangled_extract) == 3:
+                return open_search(term)
+
+            else:
+                return wrangled_extract
 
         else:
             return extract
