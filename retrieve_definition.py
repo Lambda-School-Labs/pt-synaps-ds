@@ -65,7 +65,7 @@ def open_search(term):
     # Resolve means to return redirects as the page they point to.
 
 
-    R = S.get(url=URL, params=PARAMS)
+    R = S.get(url=URL, params=params)
     DATA = R.json()
     suggests = DATA[1]
     return f"Did you mean {suggests[0]}, {suggests[1]}, {suggests[2]}?"

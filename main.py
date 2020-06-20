@@ -36,7 +36,7 @@ async def root():
 
 
 # Creating a serach route to access retrieve_definition function
-@app.post('/search')
+@app.get('/search')
 async def wiki_search(word: str):
         """Accessing wikipedia's api and returns
         first 300 characters for a given term"""
@@ -55,7 +55,7 @@ async def calender_heatmap(request: Request, month: int, year: int):
 
 
 # Create route to delete heatmap
-@app.get('/delete_heatmap')
+@app.delete('/delete_heatmap')
 async def delete_heatmap():
     """deletes heatmap html file saved in server"""
     os.remove('templates/heatmap.html')
@@ -71,7 +71,7 @@ async def plot_gauge(request: Request, streaks: int):
 
 
 # Create route to delete gauge plot
-@app.get('/delete_gauge')
+@app.delete('/delete_gauge')
 async def delete_gauge():
     """deletes gauge html file saved in server"""
     os.remove('templates/gauge.html')
