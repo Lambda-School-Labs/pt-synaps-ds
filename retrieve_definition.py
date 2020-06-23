@@ -10,12 +10,8 @@ import inflect
 # Start engine for text_wrangle() singularization
 p = inflect.engine()
 
-<<<<<<< HEAD
-def retrieve_definition(term):
-=======
 
 def retrieve_definition(term, term_wrangled=False):
->>>>>>> added state param to retrieve_definition()
 
     S = requests.Session()
 
