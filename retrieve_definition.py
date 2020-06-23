@@ -11,7 +11,7 @@ import inflect
 p = inflect.engine()
 
 
-def retrieve_definition(term):
+def retrieve_definition(term, term_wrangled=False):
 
     S = requests.Session()
 
@@ -41,23 +41,30 @@ def retrieve_definition(term):
         # this selects the extract from within the JSON object returned by the API call. Two steps are necessary
         # because one of the dictionary keys is the page ID for that term.
 
-        if len(extract) == 3:
-            wrangled_term = text_wrangle(term)
-            wrangled_extract = retrieve_definition(wrangled_term)
-            if len(wrangled_extract) == 3:
-                return open_search(term)
+        # if the length of extract is 3, that indicates extract is '...',
+        # which is what the API usually returns if it doesn't find a page
+        if len(extract) > 3:
+            return extract
 
-            else:
+        elif (len(extract) == 3 and term_wrangled == False):
+            wrangled_term = text_wrangle(term)
+            print("Wrangled_term: ", wrangled_term)
+            wrangled_extract = retrieve_definition(wrangled_term,
+                                                term_wrangled=1)
+            print(len(wrangled_extract))
+            if len(wrangled_extract) > 3:
                 return wrangled_extract
 
+            else:
+                return open_search(term)
+
         else:
-            return extract
+            return open_search(term)
+            
     except KeyError:
         # sometimes instead of an empty string as an extract the API call returns a "missing" key in JSON, this accounts
         # for that
         return open_search(term)
-
-
 
 def open_search(term):
     """
