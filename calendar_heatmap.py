@@ -165,8 +165,21 @@ def get_viz(month_to_show=datetime.now().month,
         # gets the numeric weekday of the day before the first in the dataframe
         weekday = weekdays[day_numeric]
         # gets name for the new weekday
-        new_top_row = pd.DataFrame([[np.NaN, np.NaN, month_to_show, 0, weekday, day_numeric, np.NaN, np.NaN]],
-                                   columns=['Date', 'Events', 'Month', 'Day', 'Weekday', 'Day_Numeric', 'Year'])
+        new_top_row = pd.DataFrame([[np.NaN,
+                                     np.NaN,
+                                     month_to_show,
+                                     0,
+                                     weekday,
+                                     day_numeric,
+                                     np.NaN,
+                                     np.NaN]],
+                                   columns=['Date',
+                                            'Events',
+                                            'Month',
+                                            'Day',
+                                            'Weekday',
+                                            'Day_Numeric',
+                                            'Year'])
         # creates a dummy row that contains only the month, weekday, and
         # numeric day of the week
         current_month_used = pd.concat([new_top_row, current_month_used])
@@ -178,13 +191,24 @@ def get_viz(month_to_show=datetime.now().month,
     current_month_used['Week'] = current_month_used.apply(
         week_of_month, axis=1)
     # runs dataframe through week_of_month function, applies this to new column
-    figure = go.Figure(data=go.Heatmap(z=current_month_used['Events'], x=current_month_used['Weekday'],
-                                       y=current_month_used['Week'],
-                                       colorscale=[[0, 'rgb(152,251,152)'],
-                                                   [1, 'rgb(0,100,0)']], connectgaps=False,
-                                       showscale=False, xgap=3, ygap=3,
-                                       autocolorscale=False, hoverongaps=False
-                                       ))
+    figure = go.Figure(
+        data=go.Heatmap(
+            z=current_month_used['Events'],
+            x=current_month_used['Weekday'],
+            y=current_month_used['Week'],
+            colorscale=[
+                [
+                    0,
+                    'rgb(152,251,152)'],
+                [
+                    1,
+                    'rgb(0,100,0)']],
+            connectgaps=False,
+            showscale=False,
+            xgap=3,
+            ygap=3,
+            autocolorscale=False,
+            hoverongaps=False))
     # creates a heatmap comparing the number of events (z) on each day, with the
     # weekday as the x-axis and week of the month as the y-axis. Colorscale runs from
     # pale green to dark forest green. No data shown for NaN values on hover,
