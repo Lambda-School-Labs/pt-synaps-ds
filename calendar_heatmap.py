@@ -11,7 +11,9 @@ def get_viz_user_info(user_id):
     database_location = DATABASE_URL
     connection = sqlite3.connect(database_location)
     cursor = connection.cursor()
-    results = cursor.execute(f"SELECT created_at FROM decks WHERE user_id = {user_id}")
+
+    results = cursor.execute(
+        f"SELECT created_at FROM decks WHERE user_id = {user_id}")
     # gets all dates from the 'decks' table for the given user
 
     dates_created_decks = []
@@ -23,14 +25,16 @@ def get_viz_user_info(user_id):
     dates_created_decks.sort()
     results = cursor.execute(
         f"SELECT session_start FROM sessions WHERE (user_id = {user_id}) AND (total_looked_at > 0)")
-    # gets all dates from 'sessions' table where the given user logged and viewed at least one card
+
+    # gets all dates from 'sessions' table where the given user logged and
+    # viewed at least one card
 
     dates_viewed_cards = []
     for timestamp in results:
         timestamp = timestamp.date()
         dates_viewed_cards.append(timestamp)
     # adds each of these dates to a list
-    return dates_created_deck, dates_viewed_cards
+    return dates_created_decks, dates_viewed_cards
 
 
 def week_of_month(row):
@@ -109,7 +113,7 @@ def get_viz(month_to_show=datetime.now().month, year_to_show=datetime.now().year
 
     def create_events(date_obj):
         """Function to add use events to dates dataframe. Nested to be able to access
-    dates dictionary."""
+        dates dictionary."""
         keys = list(dates.keys())
         # all the dates in the dictionary as a list
         for i in range(len(keys)):
@@ -117,12 +121,15 @@ def get_viz(month_to_show=datetime.now().month, year_to_show=datetime.now().year
         # converts all the datetime64 keys to strings containing just year-month-day
         # in the format %Y-%m-%d
         str_date_obj = str(date_obj)[:10]
-        # converts this timestamp object to a string of the same format so they can be compared
+        # converts this timestamp object to a string of the same format so they
+        # can be compared
         date_obj = pd.Timestamp.to_datetime64(date_obj)
-        # converts the Pandas Timestamp object to a native Python datetime64 object
+        # converts the Pandas Timestamp object to a native Python datetime64
+        # object
         if str_date_obj in keys:
             return dates[date_obj]
-        # if the date is in the dictionary keys, return the number of events from the dict
+        # if the date is in the dictionary keys, return the number of events
+        # from the dict
         else:
             return 0
 
@@ -135,13 +142,15 @@ def get_viz(month_to_show=datetime.now().month, year_to_show=datetime.now().year
     used_app['Month'] = used_app['Date'].apply(lambda x: x.month)
     used_app['Day'] = used_app['Date'].apply(lambda x: x.day)
     used_app['Weekday'] = used_app['Date'].apply(lambda x: x.strftime('%A'))
-    used_app['Day_Numeric'] = used_app['Date'].apply(lambda x: int(x.weekday()))
+    used_app['Day_Numeric'] = used_app['Date'].apply(
+        lambda x: int(x.weekday()))
     used_app['Year'] = used_app['Date'].apply(lambda x: x.year)
     # creates separate columns for the month, day of the month,
     # weekday, numeric day of the week, and year for each date in the range
 
     current_month_used = used_app[used_app['Month'] == month_to_show]
-    current_month_used = current_month_used[current_month_used['Year'] == year_to_show]
+    current_month_used = current_month_used[current_month_used['Year']
+                                            == year_to_show]
     # creates new dataframe containing only the data from the relevant month
 
     current_month_used = current_month_used.sort_values(by=['Day'])
@@ -157,27 +166,29 @@ def get_viz(month_to_show=datetime.now().month, year_to_show=datetime.now().year
         # gets name for the new weekday
         new_top_row = pd.DataFrame([[np.NaN, np.NaN, month_to_show, 0, weekday, day_numeric, np.NaN, np.NaN]],
                                    columns=['Date', 'Events', 'Month', 'Day', 'Weekday', 'Day_Numeric', 'Year'])
-        # creates a dummy row that contains only the month, weekday, and numeric day of the week
+        # creates a dummy row that contains only the month, weekday, and
+        # numeric day of the week
         current_month_used = pd.concat([new_top_row, current_month_used])
         # adds this dummy data row to the dataframe
     current_month_used = current_month_used.reset_index(drop=True)
     # resets the current_month_used dataframe index to start at 0
     current_month_used['From_1st_Monday'] = current_month_used.index
     # creates a new column that is the index values
-    current_month_used['Week'] = current_month_used.apply(week_of_month, axis=1)
+    current_month_used['Week'] = current_month_used.apply(
+        week_of_month, axis=1)
     # runs dataframe through week_of_month function, applies this to new column
     figure = go.Figure(data=go.Heatmap(z=current_month_used['Events'], x=current_month_used['Weekday'],
                                        y=current_month_used['Week'],
-                                       colorscale=
-                                       [[0, 'rgb(152,251,152)'],
-                                        [1, 'rgb(0,100,0)']], connectgaps=False,
+                                       colorscale=[[0, 'rgb(152,251,152)'],
+                                                   [1, 'rgb(0,100,0)']], connectgaps=False,
                                        showscale=False, xgap=3, ygap=3,
                                        autocolorscale=False, hoverongaps=False
                                        ))
     # creates a heatmap comparing the number of events (z) on each day, with the
     # weekday as the x-axis and week of the month as the y-axis. Colorscale runs from
     # pale green to dark forest green. No data shown for NaN values on hover,
-    # and NaN values are not averaged out (leaves a blank space for days with no data)
+    # and NaN values are not averaged out (leaves a blank space for days with
+    # no data)
     figure.update_layout(autosize=False, width=1200, height=800,
                          title={
                              'text': "Days Used App This Month",
