@@ -1,3 +1,6 @@
+import plotly.express as px
+import pandas as pd
+
 def get_session_length(df):
     ''' Calculate length of session in seconds'''
     df['session_start'] = pd.to_datetime(df['session_start'])
@@ -22,7 +25,6 @@ def get_cards_per_min(df):
 
 def make_bar_chart(df):
     """Makes bar chart based on input dataframe"""
-    df = pd.read_csv('test_data/mean_cards_test.csv')
     df['session_length'] = get_session_length(df)
     
     df['start_hour'] = get_start_hour(df)
@@ -44,3 +46,7 @@ def make_bar_chart(df):
     
     # Return figure as HTML frame
     return fig.write_html('templates/mean_cards_per_min.html')
+
+# Function to retrieve actual user data goes here
+df = pd.read_csv('test_data/mean_cards_test.csv')
+make_bar_chart(df)
