@@ -22,6 +22,7 @@ def get_cards_per_min(df):
 
 def make_bar_chart(df):
     """Makes bar chart based on input dataframe"""
+    df = pd.read_csv('test_data/mean_cards_test.csv')
     df['session_length'] = get_session_length(df)
     
     df['start_hour'] = get_start_hour(df)
