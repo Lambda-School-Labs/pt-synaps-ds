@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
@@ -23,6 +24,14 @@ app.add_middleware(
 
 # Defining the templating directeroy
 templates = Jinja2Templates(directory="templates")
+
+
+# A Pydantic model
+class User(BaseModel):
+    id : int
+    total_looked_at : int
+    session_start : str
+    session_end : str
 
 
 @app.get("/")
