@@ -82,9 +82,10 @@ class TestLeitner(unittest.TestCase):
 
         # Expected values for comfort_level after test_df is run through
         # leitner
-        self.comfort_level_series = pd.Series(data=[4,4,1,1,5])
-        self.assertEqual(self.df['comfort_level'], 
-                        self.comfort_level_series)
+        comfort_level_series = pd.Series(data=[4,4,1,1,5], name='comfort_level')
+        pd.testing.assert_series_equal(self.df['comfort_level'], 
+                        comfort_level_series)
+        self.assertIs(type(self.df['next_due'][0]), str)
 
 
 
