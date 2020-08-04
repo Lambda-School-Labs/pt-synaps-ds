@@ -11,7 +11,7 @@ def leitner_dates(row):
     comfort level is less than 5, comfort level is raised by 1. In all
     cases next_due is then updated according to comfort level.
     '''
-
+    print(row)
     if (row['starred'] == 0) & (row['comfort_level'] < 5):
         row['comfort_level'] += 1
         row = update_next_due(row)

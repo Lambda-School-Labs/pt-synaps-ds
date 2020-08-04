@@ -1,7 +1,8 @@
 import unittest
 from retrieve_definition import text_wrangle, open_search, get_API_params, get_opensearch_params
 from autogenerate_decks import batch_search, get_article_size, get_search_string, get_params_autogen, get_params_size
-
+from leitner import leitner_dates
+import pandas as pd
 
 
 class TestAutogeneration(unittest.TestCase):
@@ -60,6 +61,31 @@ class TestWikiAPI(unittest.TestCase):
         self.assertEqual(get_opensearch_params('Cat'), {'action': 'opensearch', 'search': 'Cat', 'redirects': 'resolve',
                                                         'format': 'json'})
         self.assertIs(type(get_opensearch_params('Cat')), dict)
+
+
+class TestLeitner(unittest.TestCase):
+
+    def test_leitner_dates(self):
+        test_matrix = [(0, 0, 3, ''),
+                        (1, 0, 3, ''),
+                        (2, 1, 2, ''),
+                        (3, 1, 5, ''),
+                        (4, 0, 5, '')]
+        
+        test_df = pd.DataFrame(test_matrix, 
+            columns=['card_id', 
+                    'starred', 
+                    'comfort_level', 
+                    'next_due'])
+
+        self.df = test_df.apply(leitner_dates, axis=1)
+
+        # Expected values for comfort_level after test_df is run through
+        # leitner
+        self.comfort_level_series = pd.Series(data=[4,4,1,1,5])
+        self.assertEqual(self.df['comfort_level'], 
+                        self.comfort_level_series)
+
 
 
 if __name__ == '__main__':
