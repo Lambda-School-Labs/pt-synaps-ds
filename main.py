@@ -1,12 +1,16 @@
+from autogenerate_decks import autogenerate
 from fastapi import FastAPI, Request
+from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
+
 import calendar_heatmap
+import json
 import os
 from retrieve_definition import retrieve_definition
 import gauge_plot
-from pydantic import BaseModel
 
 
 # Creating FastApi
@@ -42,7 +46,12 @@ async def wiki_search(word: str):
     """Accessing wikipedia's api and returns
     first 300 characters for a given term"""
     data = retrieve_definition(word)
-    return data
+    if isinstance(data, str):
+        json = {"msg": data}
+        data_json = jsonable_encoder(json)
+        return data_json
+    else:
+        return data
 
 
 # Create a route to return heatmap
@@ -83,6 +92,15 @@ async def delete_gauge():
         return 'File deleted'
     except BaseException:
         return "File has already been deleted"
+
+
+@app.get('/autogenerate_deck')
+async def autogenerate_search(word: str):
+    """Function to generate a set of extracts from a 
+    single user-entered term using the Wikipedia API"""
+    data = autogenerate(word)
+    data_json = jsonable_encoder(data)
+    return data_json
 
 
 if __name__ == '__main__':
