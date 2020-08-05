@@ -1,14 +1,22 @@
 from datetime import datetime
+from autogenerate_decks import autogenerate
 from fastapi import FastAPI, Request
+from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
+
 import calendar_heatmap
+import json
 import os
 from retrieve_definition import retrieve_definition
 import gauge_plot
 from pydantic import BaseModel
+import pandas as pd
 from typing import List
+
+from leitner import leitner_dates
 
 
 # Creating FastApi
@@ -51,7 +59,12 @@ async def wiki_search(word: str):
     """Accessing wikipedia's api and returns
     first 300 characters for a given term"""
     data = retrieve_definition(word)
-    return data
+    if isinstance(data, str):
+        json = {"msg": data}
+        data_json = jsonable_encoder(json)
+        return data_json
+    else:
+        return data
 
 
 # Create a route to return heatmap
@@ -78,7 +91,7 @@ async def delete_heatmap():
 # Create route to return gauge plot
 @app.post('/gauge')
 async def plot_gauge(request: Request, streaks: int):
-    """Return the streaks gauge plot in html form"""
+    """Return the streaks gauge plot in SVG format"""
     gauge_plot.gauge(streaks)
     return templates.TemplateResponse('gauge.svg', {"request": request})
 
@@ -86,17 +99,32 @@ async def plot_gauge(request: Request, streaks: int):
 # Create route to delete gauge plot
 @app.delete('/delete_gauge')
 async def delete_gauge():
-    """deletes gauge html file saved in server"""
+    """deletes gauge svg file saved in server"""
     try:
-        os.remove('templates/gauge.html')
+        os.remove('templates/gauge.svg')
         return 'File deleted'
     except BaseException:
         return "File has already been deleted"
 
 
-@app.post('/test')
+
+@app.get('/autogenerate_deck')
+async def autogenerate_search(word: str):
+    """Function to generate a set of extracts from a 
+    single user-entered term using the Wikipedia API"""
+    data = autogenerate(word)
+    data_json = jsonable_encoder(data)
+    return data_json
+
+
+@app.post('/leitner')
 async def json_to_pd(user: List[User]):
-    return user
+    """Function to analyze card-by-card user data after a study session
+    and apply leitner system spaced repetition to it """
+    df = pd.DataFrame(user)
+    df_ = df.apply(leitner_dates, axis=1)
+    data_json = df1.to_json(orient='index')
+    return data_json
 
 
 if __name__ == '__main__':
