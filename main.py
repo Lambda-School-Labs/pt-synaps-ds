@@ -8,6 +8,7 @@ import os
 from retrieve_definition import retrieve_definition
 import gauge_plot
 from pydantic import BaseModel
+from typing import List
 
 
 # Creating FastApi
@@ -28,10 +29,9 @@ templates = Jinja2Templates(directory="templates")
 
 # A Pydantic model
 class User(BaseModel):
-    id : int
-    total_looked_at : int
-    session_start : str
-    session_end : str
+    card_id : int
+    isStarred : bool
+    comfortLevel : int
 
 
 @app.get("/")
@@ -80,7 +80,7 @@ async def delete_heatmap():
 async def plot_gauge(request: Request, streaks: int):
     """Return the streaks gauge plot in html form"""
     gauge_plot.gauge(streaks)
-    return templates.TemplateResponse('gauge.html', {"request": request})
+    return templates.TemplateResponse('gauge.svg', {"request": request})
 
 
 # Create route to delete gauge plot
@@ -92,6 +92,11 @@ async def delete_gauge():
         return 'File deleted'
     except BaseException:
         return "File has already been deleted"
+
+
+@app.post('/test')
+async def json_to_pd(user: List[User]):
+    return user
 
 
 if __name__ == '__main__':
