@@ -113,11 +113,11 @@ async def leitner_system(user: List[Card]):
 
 
 @app.post('/metrics')
-async def get_metrics(user_data: List[User]):
+async def get_metrics(user_data: User):
     """Function to get all user metrics needed. Returns an array of objects [daily, weekle, monthly] 
     cards per minute and best sessions including percentage difference, 
     unicode for the up/down/equal sign, and a color code"""
-    df = pd.DataFrame([dict(x) for x in user_data])
+    df = pd.DataFrame(user_data)
 
     # saving each function's result into a variable
     daily_cards = daily_cards_min_comparison(df)
