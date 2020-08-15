@@ -17,7 +17,6 @@ def leitner_proportions(df):
     prop_df = pd.DataFrame.from_dict([prop_dict], orient='columns') 
 
     prop_df = prop_df.T.rename(columns={0:'proportion'})   
-<<<<<<< HEAD
     
     return prop_df
 
@@ -49,26 +48,6 @@ def leitner_bar(levels):
     """
 
     df = pd.DataFrame(levels, columns=['comfort_level'])
-=======
-    
-    return prop_df
-
-def get_label_locs(prop_df):
-    
-    locs = [0 for _ in range(5)]
-    
-    for i in range(4):
-        locs[i+1] = locs[i] + prop_df['proportion'].iloc[i]
-        
-    for i in range(len(locs)):
-        locs[i] += prop_df['proportion'].iloc[i]/2.6
-
-    return locs
-
-
-def leitner_bar(df):
-    
->>>>>>> finalized list comp to dynamically position labels
     prop_df = leitner_proportions(df)
     locs = get_label_locs(prop_df)
 
@@ -92,17 +71,12 @@ def leitner_bar(df):
             text=txt,
             showarrow=False,
             xref='paper',
-<<<<<<< HEAD
             yref='paper',
             font=dict(
                 family='Lato',
                 size=30,
                 color="#000000")
             ) for xval, txt in zip(locs, prop_df.index)
-=======
-            yref='paper'
-            ) for xval, txt in zip(locs, plotly_df.index)
->>>>>>> finalized list comp to dynamically position labels
         ]
         )
     fig.update_traces(marker=dict(color="#FF909A"),
@@ -115,9 +89,4 @@ def leitner_bar(df):
                      selector=dict(name='4'))
     fig.update_traces(marker=dict(color="#FFF4BD"),
                      selector=dict(name='5'))
-<<<<<<< HEAD
     return fig.to_json()
-=======
-    
-    return fig.to_json()
->>>>>>> finalized list comp to dynamically position labels
