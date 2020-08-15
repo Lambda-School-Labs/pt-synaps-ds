@@ -12,24 +12,31 @@ def leitner_proportions(df):
         numer = df_i.shape[0]
         prop_dict[i] = numer / denom
 
-    plotly_df = pd.DataFrame.from_dict([prop_dict], orient='columns')    
-    
-    return plotly_df
+    prop_df = pd.DataFrame.from_dict([prop_dict], orient='columns') 
 
-def get_label_locs(plotly_df):
+    prop_df = prop_df.T.rename(columns={0:'proportion'})   
     
-    # TODO: Make this put the numbers in the correct places even on non-dummy 
-    # data
-    df_t = plotly_df.T.rename(columns={0:'proportion'})
-    
-    locs = {}
-    
-    for prop, text in zip(df_t['proportion'], df_t.index):
-        locs[text] = prop
+    return prop_df
 
-def leitner_bar(plotly_df):
+def get_label_locs(prop_df):
     
-    fig = px.bar(plotly_df, orientation='h', width=400, height=200)
+    locs = [0 for _ in range(5)]
+    
+    for i in range(4):
+        locs[i+1] = locs[i] + prop_df['proportion'].iloc[i]
+        
+    for i in range(len(locs)):
+        locs[i] += prop_df['proportion'].iloc[i]/2.6
+
+    return locs
+
+
+def leitner_bar(df):
+    
+    prop_df = leitner_proportions(df)
+    locs = get_label_locs(prop_df)
+
+    fig = px.bar(prop_df.T, orientation='h')
     fig.update_xaxes(
         showticklabels=False,
         showgrid=False,
@@ -42,60 +49,26 @@ def leitner_bar(plotly_df):
     fig.update_layout(
         plot_bgcolor = '#ffffff',
         showlegend = False,
-        # Works perfectly for dummy data. 
-        # TODO: Make it work for other data by finishing get_label_locs()
         annotations=[
             dict(
-            x=0,
-            y=-0.2,
-            text=1,
+            x=xval,
+            y=0.5,
+            text=txt,
             showarrow=False,
             xref='paper',
             yref='paper'
-            ),
-            dict(
-            x=0.36,
-            y=-0.2,
-            text=2,
-            showarrow=False,
-            xref='paper',
-            yref='paper'
-            ),
-            dict(
-            x=0.53,
-            y=-0.2,
-            text=3,
-            showarrow=False,
-            xref='paper',
-            yref='paper'
-            ),
-            dict(
-            x=0.72,
-            y=-0.2,
-            text=4,
-            showarrow=False,
-            xref='paper',
-            yref='paper'
-            ),
-            dict(
-            x=0.88,
-            y=-0.2,
-            text=5,
-            showarrow=False,
-            xref='paper',
-            yref='paper'
-            )
+            ) for xval, txt in zip(locs, plotly_df.index)
         ]
         )
     fig.update_traces(marker=dict(color="#FF909A"),
-                     selector=dict(name='Level 1'))
+                     selector=dict(name='1'))
     fig.update_traces(marker=dict(color="#EFC9ED"),
-                     selector=dict(name='Level 2'))
+                     selector=dict(name='2'))
     fig.update_traces(marker=dict(color="#C8F5FF"),
-                     selector=dict(name='Level 3'))
+                     selector=dict(name='3'))
     fig.update_traces(marker=dict(color="#D5E3FF"),
-                     selector=dict(name='Level 4'))
+                     selector=dict(name='4'))
     fig.update_traces(marker=dict(color="#FFF4BD"),
-                     selector=dict(name='Level 5'))
-    fig.show()
-#     return fig.to_json()
+                     selector=dict(name='5'))
+    
+    return fig.to_json()
