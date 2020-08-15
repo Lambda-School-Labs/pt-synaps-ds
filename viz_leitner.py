@@ -56,7 +56,12 @@ def leitner_bar(df):
             text=txt,
             showarrow=False,
             xref='paper',
-            yref='paper'
+            yref='paper',
+            font=dict(
+                family='Lato',
+                size=49.0666,
+                color="#000000")
+            )
             ) for xval, txt in zip(locs, plotly_df.index)
         ]
         )
