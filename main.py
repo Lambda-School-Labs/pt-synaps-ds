@@ -116,7 +116,7 @@ async def leitner_system(user: List[Card]):
 async def get_metrics(user_data: List[User]):
     """Function to get all user metrics needed. Returns an array of objects [daily, weekle, monthly] 
     cards per minute and best sessions including percentage difference, 
-    unicode for the up/down/equal sign, and a color code"""
+    unicode for the (up/down/equal) sign, and a color code"""
     df = pd.DataFrame([dict(x) for x in user_data])
 
     # saving each function's result into a variable
