@@ -83,6 +83,7 @@ def daily_cards_min_comparison(df):
     result = make_results_dict(today_average, difference, color_code, arrow)
     result['daily_cards_min'] = result.pop('metric')
     today_viewed_result = total_viewed(today_viewed, yesterday_viewed)
+    today_viewed_result['today_viewed'] = today_viewed_result.pop('total_viewed')
     return result, today_viewed_result
 
 
@@ -133,6 +134,7 @@ def weekly_per_min_comparison(df):
     result = make_results_dict(week_average, difference, color_code, arrow)
     result['weekly_cards_min'] = result.pop('metric')
     week_viewed_result = total_viewed(thisweek_viewed, lastweek_viewed)
+    week_viewed_result['thisweek_viewed'] = week_viewed_result.pop('total_viewed')
     return result, week_viewed_result
 
 
@@ -183,6 +185,7 @@ def monthly_per_min_comparison(df):
     result = make_results_dict(month_average, difference, color_code, arrow)
     result['monthly_cards_min'] = result.pop('metric')
     month_viewed_result = total_viewed(thismonth_viewed, lastmonth_viewed)
+    month_viewed_result['thismonth_viewed'] = month_viewed_result.pop('total_viewed')
     return result, month_viewed_result
 
 
@@ -360,5 +363,7 @@ def total_viewed(first_period_viewed, second_period_viewed):
         # hex color code for black
         arrow = "\u003D"
         # unicode for equal sign
-    results_dict = {'total_viewed': first_period_total, 'difference': difference, 'color_code': color_code, 'unicode': arrow}
+    results_dict = {'total_viewed': first_period_total, 'difference_viewed': difference, 'color_code_viewed': color_code,
+                    'unicode_viewed': arrow}
     return results_dict
+
